@@ -1,0 +1,35 @@
+version: '3.7'
+services:
+  webserver:
+    depends_on:
+      - database
+    build: 
+      context: ./dockerfiles
+      dockerfile: php
+    volumes:
+      - ./:/var/www/html
+      - phpunit-uploads:/var/www/wordpress/wp-content/uploads
+    ports: 
+      - "8000:80"
+    restart: always
+    links:
+      - database
+
+  database:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - database_wordpress_php8:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    ports:
+      - "8908:3306"
+
+volumes:
+  database_wordpress_php8: {}
+  # Using a volume for the uploads directory improves PHPUnit performance.
+  phpunit-uploads: {}

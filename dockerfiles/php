@@ -1,0 +1,6 @@
+FROM php:8.0.0RC5-apache
+
+ENV WP_TESTS_DIR=/var/www/html/wordpress-tests-lib
+
+RUN docker-php-ext-install mysqli \
+&& docker-php-ext-enable mysqli
